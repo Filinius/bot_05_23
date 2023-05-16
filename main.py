@@ -45,12 +45,11 @@ async def auth_exercise_result(message: types.Message, state: FSMContext):
     exercise = data['exercise']
     exercise_result = data['exercise_result']
 
-    #await message.answer(f"{data['name']}. Название упражнения: {data['exercise']}\nРезультат выполнения упражнения: {data['exercise_result']}")
+    # await message.answer(f"{data['name']}. Название упражнения: {data['exercise']}\nРезультат выполнения
+    # упражнения: {data['exercise_result']}")
     await message.answer(f"{name}. Название упражнения: {exercise}\nРезультат выполнения упражнения: {exercise_result}")
     await state.finish()
-    #await state.reset_state(with_data=True)
-
-
+    # await state.reset_state(with_data=True)
 
 
 def register_handlers(dp: Dispatcher):
@@ -63,4 +62,6 @@ def register_handlers(dp: Dispatcher):
 
 if __name__ == '__main__':
     register_handlers(dp=dp)
-    executor.start_polling(dp, skip_updates=True)  # skip_updates=True пропустить все обновления, которые бот пропустил во время отключения
+    executor.start_polling(dp,
+                           skip_updates=True)  # skip_updates=True пропустить все обновления, которые бот пропустил
+    # во время отключения
