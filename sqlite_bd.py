@@ -16,4 +16,8 @@ class Database:
         self.conn.commit()
 
     def add_user(self, user_id):
-        self.curs.execute('SELECT id_user FROM users WHERE id_user=?',(user_id,))
+        with self.conn:
+            self.curs.execute("INSERT INTO users (id_user) VALUES (?)",(user_id,))
+
+
+
