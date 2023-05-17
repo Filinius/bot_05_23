@@ -24,7 +24,7 @@ async def on_startup(_):
 
 
 async def start_handler(message: types.Message):
-    db.add_user(message.from_user.id)
+    db.add_id_user_full_name(message.from_user.id, message.from_user.full_name)
     name = message.from_user.full_name
     await message.answer(f"Привет {name}! Я помогу тебе подсчитать количество набранных баллов по результатам "
                          f"выполненных упражнений.\nНажми /auth, чтобы начать.")
@@ -74,5 +74,4 @@ def register_handlers(dp: Dispatcher):
 if __name__ == '__main__':
     register_handlers(dp=dp)
     executor.start_polling(dp, skip_updates=True, on_startup=on_startup)  # skip_updates=True пропустить все
-    # обновления, которые бот пропустил
-    # во время отключения
+    # обновления, которые бот пропустил во время отключения

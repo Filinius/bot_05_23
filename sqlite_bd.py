@@ -11,10 +11,10 @@ class Database:
 
     async def create_table_user(self):
         self.curs.execute(
-            'CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, id_user INTEGER, exercise TEXT, exercise_result '
+            'CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, user_id INTEGER, full_name TEXT, exercise TEXT, exercise_result '
             'INTEGER)')
         self.conn.commit()
 
-    def add_user(self, user_id):
+    def add_id_user_full_name(self, user_id, full_name):
         with self.conn:
-            self.curs.execute("INSERT INTO users (id_user) VALUES (?)", (user_id,))
+            self.curs.execute("INSERT INTO users (user_id, full_name) VALUES (?, ?)", (user_id, full_name))
