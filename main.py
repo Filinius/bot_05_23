@@ -62,9 +62,5 @@ def register_handlers(dp: Dispatcher):
 
 if __name__ == '__main__':
     register_handlers(dp=dp)
-    executor.start_polling(dp,
-                           skip_updates=True)  # skip_updates=True пропустить все обновления, которые бот пропустил
+    executor.start_polling(dp, skip_updates=True)  # skip_updates=True пропустить все обновления, которые бот пропустил
     # во время отключения
-'''
-1212
-'''
