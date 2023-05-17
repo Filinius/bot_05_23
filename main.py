@@ -41,14 +41,25 @@ async def auth_start(message: types.Message):
 async def auth_sex(message: types.Message, state: FSMContext):
     sex = message.text
     await state.update_data(sex=sex)
-    await message.answer(f"Ваш пол {sex}!\nВведи название упражнения")
+
+    buttons = [
+        types.InlineKeyboardButton(text="Бег на 100 м", callback_data="exercise_run_100"),
+        types.InlineKeyboardButton(text="Подтягивание на перекладине", callback_data="exercise_pull_up"),
+        types.InlineKeyboardButton(text="Марш-бросок на 5 км", callback_data="exercise_marsh_for_5")
+    ]
+    keyboard = types.InlineKeyboardMarkup(row_width=1)
+    keyboard.add(*buttons)
+
+    await message.answer(f"Ваш пол {sex}!\nВыберите упражнение.", reply_markup=keyboard)
+
     await AuthStates.exercise.set()
 
 
-async def auth_exercise(message: types.Message, state: FSMContext):
-    exercise = message.text
+async def auth_exercise(callback_query: types.CallbackQuery, state: FSMContext):
+    exercise = callback_query.data[9:]
     await state.update_data(exercise=exercise)
-    await message.answer(f"Введите результат выполения упражнения {exercise}")
+    await bot.answer_callback_query(callback_query.id)
+    await bot.send_message(callback_query.from_user.id, f"Введите результат выполения упражнения {exercise}")
     await AuthStates.exercise_result.set()
 
 
@@ -70,7 +81,9 @@ def register_handlers(dp: Dispatcher):
     dp.register_message_handler(start_handler, commands="start")
     dp.register_message_handler(auth_start, commands="auth")
     dp.register_message_handler(auth_sex, state=AuthStates.sex)
-    dp.register_message_handler(auth_exercise, state=AuthStates.exercise)
+    #dp.register_message_handler(auth_exercise, state=AuthStates.exercise)
+    dp.register_callback_query_handler(auth_exercise, lambda c: c.data and c.data.startswith('exercise_'),
+                                       state=AuthStates.exercise)
     dp.register_message_handler(auth_exercise_result, state=AuthStates.exercise_result)
 
 
