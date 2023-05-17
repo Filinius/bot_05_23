@@ -17,8 +17,3 @@ class Database:
 
     def add_user(self, user_id):
         self.curs.execute('SELECT id_user FROM users WHERE id_user=?',(user_id,))
-
-
-"""
-БД
-"""
