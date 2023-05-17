@@ -50,13 +50,18 @@ async def auth_sex(message: types.Message, state: FSMContext):
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     keyboard.add(*buttons)
 
-    await message.answer(f"Ваш пол {sex}!\nВыберите упражнение.", reply_markup=keyboard)
+    await message.answer(f"Ваш пол {sex}!\nВыберите упражнение:", reply_markup=keyboard)
 
     await AuthStates.exercise.set()
 
 
 async def auth_exercise(callback_query: types.CallbackQuery, state: FSMContext):
-    exercise = callback_query.data[9:]
+    exercise_dict = {
+        "run_100": "бег на 100 м",
+        "pull_up": "подтягивание на перекладине",
+        "marsh_for_5": "марш-бросок на 5 км"
+    }
+    exercise = exercise_dict[callback_query.data[9:]]
     await state.update_data(exercise=exercise)
     await bot.answer_callback_query(callback_query.id)
     await bot.send_message(callback_query.from_user.id, f"Введите результат выполения упражнения {exercise}")
