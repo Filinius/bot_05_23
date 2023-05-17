@@ -19,8 +19,11 @@ class AuthStates(StatesGroup):
 
 
 async def on_startup(_):
-    await db.create_table_user()
-    print("Подключение к БД выполнено успешно")
+    try:
+        await db.create_table_user()
+        logging.info("Подключение к БД выполнено успешно")
+    except Exception as e:
+        logging.exception(e)
 
 
 async def start_handler(message: types.Message):
