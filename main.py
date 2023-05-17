@@ -6,7 +6,6 @@ from aiogram.dispatcher.filters.state import StatesGroup, State
 import config
 from sqlite_bd import Database
 
-
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=config.TOKEN)
 dp = Dispatcher(bot=bot, storage=MemoryStorage())
@@ -18,9 +17,11 @@ class AuthStates(StatesGroup):
     exercise = State()
     exercise_result = State()
 
+
 async def on_startup(_):
     await db.create_table_user()
     print("Подключение к БД выполнено успешно")
+
 
 async def start_handler(message: types.Message):
     db.add_user(message.from_user.id)
@@ -56,9 +57,8 @@ async def auth_exercise_result(message: types.Message, state: FSMContext):
     exercise = data['exercise']
     exercise_result = data['exercise_result']
 
-    # await message.answer(f"{data['sex']}. Название упражнения: {data['exercise']}\nРезультат выполнения
-    # упражнения: {data['exercise_result']}")
-    await message.answer(f"Ваш пол {sex}.\nНазвание упражнения: {exercise}\nРезультат выполнения упражнения: {exercise_result}")
+    await message.answer(
+        f"Ваш пол {sex}.\nНазвание упражнения: {exercise}\nРезультат выполнения упражнения: {exercise_result}")
     await state.finish()
     # await state.reset_state(with_data=True)
 
@@ -73,5 +73,6 @@ def register_handlers(dp: Dispatcher):
 
 if __name__ == '__main__':
     register_handlers(dp=dp)
-    executor.start_polling(dp, skip_updates=True, on_startup=on_startup)  # skip_updates=True пропустить все обновления, которые бот пропустил
+    executor.start_polling(dp, skip_updates=True, on_startup=on_startup)  # skip_updates=True пропустить все
+    # обновления, которые бот пропустил
     # во время отключения
