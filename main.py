@@ -34,7 +34,7 @@ async def auth_start(message: types.Message):
     await AuthStates.sex.set()
 
 
-async def auth_name(message: types.Message, state: FSMContext):
+async def auth_sex(message: types.Message, state: FSMContext):
     sex = message.text
     await state.update_data(sex=sex)
     await message.answer(f"Ваш пол {sex}!\nВведи название упражнения")
@@ -66,7 +66,7 @@ async def auth_exercise_result(message: types.Message, state: FSMContext):
 def register_handlers(dp: Dispatcher):
     dp.register_message_handler(start_handler, commands="start")
     dp.register_message_handler(auth_start, commands="auth")
-    dp.register_message_handler(auth_name, state=AuthStates.sex)
+    dp.register_message_handler(auth_sex, state=AuthStates.sex)
     dp.register_message_handler(auth_exercise, state=AuthStates.exercise)
     dp.register_message_handler(auth_exercise_result, state=AuthStates.exercise_result)
 
