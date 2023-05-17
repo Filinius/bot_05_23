@@ -4,11 +4,13 @@ from aiogram import Bot, Dispatcher, executor, types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import StatesGroup, State
 import config
+from sqlite_bd import Database
 
 
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=config.TOKEN)
 dp = Dispatcher(bot=bot, storage=MemoryStorage())
+bd = Database('new.db')
 
 
 class AuthStates(StatesGroup):
@@ -16,6 +18,9 @@ class AuthStates(StatesGroup):
     exercise = State()
     exercise_result = State()
 
+async def on_startup(_):
+    await bd.create_table_user()
+    print("Подключение к БД выполнено успешно")
 
 async def start_handler(message: types.Message):
     await message.answer("Привет! Я помогу тебе авторизоваться. Нажми /auth, чтобы начать")
@@ -65,5 +70,5 @@ def register_handlers(dp: Dispatcher):
 
 if __name__ == '__main__':
     register_handlers(dp=dp)
-    executor.start_polling(dp, skip_updates=True)  # skip_updates=True пропустить все обновления, которые бот пропустил
+    executor.start_polling(dp, skip_updates=True, on_startup=on_startup)  # skip_updates=True пропустить все обновления, которые бот пропустил
     # во время отключения
