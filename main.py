@@ -14,7 +14,7 @@ db = Database('new.db')
 
 
 class AuthStates(StatesGroup):
-    name = State()
+    sex = State()
     exercise = State()
     exercise_result = State()
 
@@ -24,18 +24,20 @@ async def on_startup(_):
 
 async def start_handler(message: types.Message):
     db.add_user(message.from_user.id)
-    await message.answer("Привет! Я помогу тебе авторизоваться. Нажми /auth, чтобы начать")
+    name = message.from_user.full_name
+    await message.answer(f"Привет {name}! Я помогу тебе подсчитать количество набранных баллов по результатам "
+                         f"выполненных упражнений.\nНажми /auth, чтобы начать.")
 
 
 async def auth_start(message: types.Message):
-    await message.answer("Введите свое имя")
-    await AuthStates.name.set()
+    await message.answer("Введите свой пол.")
+    await AuthStates.sex.set()
 
 
 async def auth_name(message: types.Message, state: FSMContext):
-    name = message.text
-    await state.update_data(name=name)
-    await message.answer(f"Привет {name}!\nВведи название упражнения")
+    sex = message.text
+    await state.update_data(sex=sex)
+    await message.answer(f"Ваш пол {sex}!\nВведи название упражнения")
     await AuthStates.exercise.set()
 
 
@@ -50,13 +52,13 @@ async def auth_exercise_result(message: types.Message, state: FSMContext):
     exercise_result = message.text
     await state.update_data(exercise_result=exercise_result)
     data = await state.get_data()
-    name = data['name']
+    sex = data['sex']
     exercise = data['exercise']
     exercise_result = data['exercise_result']
 
-    # await message.answer(f"{data['name']}. Название упражнения: {data['exercise']}\nРезультат выполнения
+    # await message.answer(f"{data['sex']}. Название упражнения: {data['exercise']}\nРезультат выполнения
     # упражнения: {data['exercise_result']}")
-    await message.answer(f"{name}. Название упражнения: {exercise}\nРезультат выполнения упражнения: {exercise_result}")
+    await message.answer(f"Ваш пол {sex}.\nНазвание упражнения: {exercise}\nРезультат выполнения упражнения: {exercise_result}")
     await state.finish()
     # await state.reset_state(with_data=True)
 
@@ -64,7 +66,7 @@ async def auth_exercise_result(message: types.Message, state: FSMContext):
 def register_handlers(dp: Dispatcher):
     dp.register_message_handler(start_handler, commands="start")
     dp.register_message_handler(auth_start, commands="auth")
-    dp.register_message_handler(auth_name, state=AuthStates.name)
+    dp.register_message_handler(auth_name, state=AuthStates.sex)
     dp.register_message_handler(auth_exercise, state=AuthStates.exercise)
     dp.register_message_handler(auth_exercise_result, state=AuthStates.exercise_result)
 
