@@ -65,3 +65,6 @@ if __name__ == '__main__':
     executor.start_polling(dp,
                            skip_updates=True)  # skip_updates=True пропустить все обновления, которые бот пропустил
     # во время отключения
+'''
+12121212121212457
+'''
