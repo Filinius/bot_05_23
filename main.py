@@ -10,7 +10,7 @@ from sqlite_bd import Database
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=config.TOKEN)
 dp = Dispatcher(bot=bot, storage=MemoryStorage())
-bd = Database('new.db')
+db = Database('new.db')
 
 
 class AuthStates(StatesGroup):
@@ -19,10 +19,11 @@ class AuthStates(StatesGroup):
     exercise_result = State()
 
 async def on_startup(_):
-    await bd.create_table_user()
+    await db.create_table_user()
     print("Подключение к БД выполнено успешно")
 
 async def start_handler(message: types.Message):
+    db.add_user(message.from_user.id)
     await message.answer("Привет! Я помогу тебе авторизоваться. Нажми /auth, чтобы начать")
 
 
