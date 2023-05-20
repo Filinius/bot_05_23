@@ -33,7 +33,7 @@ async def start_handler(message: types.Message):
                          f"выполненных упражнений.\nНажми /calc, чтобы начать.")
 
 
-async def auth_start(message: types.Message):
+async def auth_sex(message: types.Message):
     buttons = [
         types.InlineKeyboardButton(text="Муж.", callback_data="sex_m"),
         types.InlineKeyboardButton(text="Жен.", callback_data="sex_w")
@@ -66,7 +66,7 @@ async def auth_sex_callback(callback_query: types.CallbackQuery, state: FSMConte
     await AuthStates.exercise.set()
 
 
-async def auth_exercise(callback_query: types.CallbackQuery, state: FSMContext):
+async def auth_exercise_callback(callback_query: types.CallbackQuery, state: FSMContext):
     exercise_dict = {
         "run_100": "бег на 100 м",
         "pull_up": "подтягивание на перекладине",
@@ -95,17 +95,14 @@ async def auth_exercise_result(message: types.Message, state: FSMContext):
 
 def register_handlers(dp: Dispatcher):
     dp.register_message_handler(start_handler, commands="start")
-    dp.register_message_handler(auth_start, commands="calc")
+    dp.register_message_handler(auth_sex, commands="calc")
     dp.register_callback_query_handler(auth_sex_callback, lambda c: c.data and c.data.startswith('sex_'),
                                        state=AuthStates.sex)
-    #dp.register_message_handler(auth_sex, state=AuthStates.sex)
-    #dp.register_message_handler(auth_exercise, state=AuthStates.exercise)
-    dp.register_callback_query_handler(auth_exercise, lambda c: c.data and c.data.startswith('exercise_'),
+    dp.register_callback_query_handler(auth_exercise_callback, lambda c: c.data and c.data.startswith('exercise_'),
                                        state=AuthStates.exercise)
     dp.register_message_handler(auth_exercise_result, state=AuthStates.exercise_result)
 
 
 if __name__ == '__main__':
     register_handlers(dp=dp)
-    executor.start_polling(dp, skip_updates=True, on_startup=on_startup)  # skip_updates=True пропустить все
-    # обновления, которые бот пропустил во время отключения
+    executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
