@@ -52,13 +52,6 @@ async def auth_sex_callback(callback_query: types.CallbackQuery, state: FSMConte
     sex = sex_dict[callback_query.data[4:]]
     await state.update_data(sex=sex)
     await bot.answer_callback_query(callback_query.id)
-    await bot.send_message(callback_query.from_user.id, f"Введите")
-    #await AuthStates.sex.set()
-
-
-async def auth_sex(message: types.Message, state: FSMContext):
-    #sex = message.text
-    #await state.update_data(sex=sex)
 
     buttons = [
         types.InlineKeyboardButton(text="Бег на 100 м", callback_data="exercise_run_100"),
@@ -68,7 +61,7 @@ async def auth_sex(message: types.Message, state: FSMContext):
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     keyboard.add(*buttons)
 
-    await message.answer(f"Выберите упражнение:", reply_markup=keyboard)
+    await bot.send_message(callback_query.from_user.id, f"Выберите упражнение:", reply_markup=keyboard)
 
     await AuthStates.exercise.set()
 
@@ -105,7 +98,7 @@ def register_handlers(dp: Dispatcher):
     dp.register_message_handler(auth_start, commands="calc")
     dp.register_callback_query_handler(auth_sex_callback, lambda c: c.data and c.data.startswith('sex_'),
                                        state=AuthStates.sex)
-    dp.register_message_handler(auth_sex, state=AuthStates.sex)
+    #dp.register_message_handler(auth_sex, state=AuthStates.sex)
     #dp.register_message_handler(auth_exercise, state=AuthStates.exercise)
     dp.register_callback_query_handler(auth_exercise, lambda c: c.data and c.data.startswith('exercise_'),
                                        state=AuthStates.exercise)
