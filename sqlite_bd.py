@@ -19,3 +19,12 @@ class Database:
         with self.conn:
             self.curs.execute("INSERT INTO users (user_id, full_name) VALUES (?, ?)", (user_id, full_name))
             self.conn.commit()
+
+    def add_user(self, user_id, full_name):
+        with self.conn:
+            self.curs.execute("SELECT user_id FROM users WHERE user_id=?", (user_id,))
+            user = self.curs.fetchone()
+            if not user:
+                self.curs.execute("INSERT INTO users (user_id, full_name) VALUES (?, ?)", (user_id, full_name))
+            else:
+                return False
