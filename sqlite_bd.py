@@ -28,3 +28,4 @@ class Database:
                 self.curs.execute("INSERT INTO users (user_id, full_name) VALUES (?, ?)", (user_id, full_name))
             else:
                 return False
+
