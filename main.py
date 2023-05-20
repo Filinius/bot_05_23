@@ -27,7 +27,8 @@ async def on_startup(_):
 
 
 async def start_handler(message: types.Message):
-    db.add_id_user_full_name(message.from_user.id, message.from_user.full_name)
+    # db.add_id_user_full_name(message.from_user.id, message.from_user.full_name)
+    db.add_user(message.from_user.id, message.from_user.full_name)
     name = message.from_user.full_name
     await message.answer(f"Привет {name}! Я помогу тебе подсчитать количество набранных баллов по результатам "
                          f"выполненных упражнений.\nНажми /calc, чтобы начать.")
@@ -43,6 +44,7 @@ async def auth_sex(message: types.Message):
 
     await message.answer(f"Выберите пол:", reply_markup=keyboard)
     await AuthStates.sex.set()
+
 
 async def auth_sex_callback(callback_query: types.CallbackQuery, state: FSMContext):
     sex_dict = {
