@@ -96,4 +96,3 @@ if __name__ == '__main__':
     register_handlers(dp=dp)
     executor.start_polling(dp, skip_updates=True, on_startup=on_startup)  # skip_updates=True пропустить все
     # обновления, которые бот пропустил во время отключения
-
