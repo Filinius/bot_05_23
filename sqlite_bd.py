@@ -12,7 +12,7 @@ class Database:
     async def create_table_user(self):
         self.curs.execute(
             'CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, user_id INTEGER, full_name TEXT, '
-            'exercise TEXT, exercise_result FLOAT)')
+            'exercise TEXT, exercise_result TEXT)')
         self.conn.commit()
 
     def add_id_user_full_name(self, user_id, full_name):
@@ -38,7 +38,7 @@ class Database:
     def calc_result(self, exercise):
         with self.conn:
             self.curs.execute(
-                "SELECT points FROM {} INNER JOIN users ON {}.exercise_result = users.exercise_result".format(exercise, exercise))
+                "SELECT points FROM run_100 INNER JOIN users ON run_100.{} = users.exercise_result".format(exercise,))
             result = self.curs.fetchone()
             self.conn.commit()
         return result
@@ -55,3 +55,5 @@ INNER JOIN orders ON users.id = orders.user_id;
 таблице "orders". Если вы хотите, чтобы результаты были отфильтрованы по определенному условию, вы можете добавить 
 оператор WHERE:
 """
+# s = Database("new.db")
+# s.create_table_user()

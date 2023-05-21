@@ -88,7 +88,7 @@ async def auth_exercise_callback(callback_query: types.CallbackQuery, state: FSM
 
 
 async def auth_exercise_result(message: types.Message, state: FSMContext):
-    exercise_result = float(message.text.strip())
+    exercise_result = message.text.strip()
     await state.update_data(exercise_result=exercise_result)
     data = await state.get_data()
 #    sex = data['sex']
@@ -100,12 +100,14 @@ async def auth_exercise_result(message: types.Message, state: FSMContext):
     db.add_exercise_exercise_result(exercise, exercise_result, user_id)
 
 #    if exercise == "run_100":
+#    exercise_result_p = "exercise_result_"+exercise
+    print(exercise_result)
     point = db.calc_result(exercise)[0]
 
 
 
 
-    print(point) # для отладки
+#    print(point) # для отладки
     print(type(exercise_result)) # для отладки
     await message.answer(
         f"Название упражнения: {exercise_d}\nРезультат выполнения упражнения: {exercise_result}\nКоличество баллов: {point}")
