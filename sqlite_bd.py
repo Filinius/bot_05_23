@@ -39,7 +39,7 @@ class Database:
         with self.conn:
             self.curs.execute(
                 "SELECT points FROM run_100 INNER JOIN users ON run_100.exercise_result = users.exercise_result")
-            result = self.curs.fetchall()
+            result = self.curs.fetchone()
             self.conn.commit()
         return result
 
