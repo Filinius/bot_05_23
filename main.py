@@ -30,8 +30,8 @@ async def start_handler(message: types.Message):
     # db.add_id_user_full_name(message.from_user.id, message.from_user.full_name)
     db.add_user(message.from_user.id, message.from_user.full_name)
     name = message.from_user.full_name
-    await message.answer(f"Привет {name}! Я помогу тебе подсчитать количество набранных баллов по результатам "
-                         f"выполненных упражнений.\nНажми /calc, чтобы начать.")
+    await message.answer(f"Привет {name}! Я помогу тебе узнать на баллов "
+                         f"выполнено упражнение.\nНажми /calc, чтобы начать.")
 
 
 async def auth_sex(message: types.Message):
