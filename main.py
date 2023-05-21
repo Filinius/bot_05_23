@@ -13,7 +13,7 @@ db = Database('new.db')
 
 
 class AuthStates(StatesGroup):
-    sex = State()
+#    sex = State()
     exercise = State()
     exercise_result = State()
 
@@ -34,27 +34,27 @@ async def start_handler(message: types.Message):
                          f"выполнено упражнение.\nНажми /calc, чтобы начать.")
 
 
-async def auth_sex(message: types.Message):
-    buttons = [
-        types.InlineKeyboardButton(text="Муж.", callback_data="sex_m"),
-        types.InlineKeyboardButton(text="Жен.", callback_data="sex_w")
-    ]
-    keyboard = types.InlineKeyboardMarkup(row_width=1)
-    keyboard.add(*buttons)
+# async def auth_sex(message: types.Message):
+#     buttons = [
+#         types.InlineKeyboardButton(text="Муж.", callback_data="sex_m"),
+#         types.InlineKeyboardButton(text="Жен.", callback_data="sex_w")
+#     ]
+#     keyboard = types.InlineKeyboardMarkup(row_width=1)
+#     keyboard.add(*buttons)
+#
+#     await message.answer(f"Выберите пол:", reply_markup=keyboard)
+#     await AuthStates.sex.set()
 
-    await message.answer(f"Выберите пол:", reply_markup=keyboard)
-    await AuthStates.sex.set()
 
-
-async def auth_sex_callback(callback_query: types.CallbackQuery, state: FSMContext):
-    sex_dict = {
-        "m": "муж",
-        "w": "жен"
-    }
-    sex = sex_dict[callback_query.data[4:]]
-    await state.update_data(sex=sex)
-    await bot.answer_callback_query(callback_query.id)
-
+#async def auth_sex_callback(callback_query: types.CallbackQuery, state: FSMContext):
+    # sex_dict = {
+    #     "m": "муж",
+    #     "w": "жен"
+    # }
+    # sex = sex_dict[callback_query.data[4:]]
+    # await state.update_data(sex=sex)
+    # await bot.answer_callback_query(callback_query.id)
+async def auth_exercise(message: types.Message):
     buttons = [
         types.InlineKeyboardButton(text="Бег на 100 м", callback_data="exercise_run_100"),
         types.InlineKeyboardButton(text="Подтягивание на перекладине", callback_data="exercise_pull_up"),
@@ -63,7 +63,7 @@ async def auth_sex_callback(callback_query: types.CallbackQuery, state: FSMConte
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     keyboard.add(*buttons)
 
-    await bot.send_message(callback_query.from_user.id, f"Выберите упражнение:", reply_markup=keyboard)
+    await message.answer(f"Выберите упражнение:", reply_markup=keyboard)
 
     await AuthStates.exercise.set()
 
@@ -85,22 +85,22 @@ async def auth_exercise_result(message: types.Message, state: FSMContext):
     exercise_result = message.text
     await state.update_data(exercise_result=exercise_result)
     data = await state.get_data()
-    sex = data['sex']
+#    sex = data['sex']
     exercise = data['exercise']
     exercise_result = data['exercise_result']
     user_id = message.from_user.id
     db.add_exercise_exercise_result(exercise, exercise_result, user_id)
     await message.answer(
-        f"Ваш пол {sex}.\nНазвание упражнения: {exercise}\nРезультат выполнения упражнения: {exercise_result}")
+        f"Название упражнения: {exercise}\nРезультат выполнения упражнения: {exercise_result}")
     await state.finish()
     # await state.reset_state(with_data=True)
 
 
 def register_handlers(dp: Dispatcher):
     dp.register_message_handler(start_handler, commands="start")
-    dp.register_message_handler(auth_sex, commands="calc")
-    dp.register_callback_query_handler(auth_sex_callback, lambda c: c.data and c.data.startswith('sex_'),
-                                       state=AuthStates.sex)
+    dp.register_message_handler(auth_exercise, commands="calc")
+#    dp.register_callback_query_handler(auth_sex_callback, lambda c: c.data and c.data.startswith('sex_'),
+#                                       state=AuthStates.sex)
     dp.register_callback_query_handler(auth_exercise_callback, lambda c: c.data and c.data.startswith('exercise_'),
                                        state=AuthStates.exercise)
     dp.register_message_handler(auth_exercise_result, state=AuthStates.exercise_result)
