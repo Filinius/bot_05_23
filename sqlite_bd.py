@@ -29,3 +29,8 @@ class Database:
             else:
                 return False
 
+    def add_exercise_exercise_result(self, exercise, exercise_result, user_id):
+        with self.conn:
+            self.curs.execute("UPDATE users SET exercise=?, exercise_result=? WHERE user_id = ?", (exercise, exercise_result, user_id))
+            #self.curs.execute("INSERT INTO users (exercise, exercise_result) VALUES (?,?)", (exercise, exercise_result))
+            self.conn.commit()
