@@ -35,10 +35,10 @@ class Database:
             #self.curs.execute("INSERT INTO users (exercise, exercise_result) VALUES (?,?)", (exercise, exercise_result))
             self.conn.commit()
 
-    def calc_result(self):
+    def calc_result(self, exercise):
         with self.conn:
             self.curs.execute(
-                "SELECT points FROM run_100 INNER JOIN users ON run_100.exercise_result = users.exercise_result")
+                "SELECT points FROM {} INNER JOIN users ON {}.exercise_result = users.exercise_result".format(exercise, exercise))
             result = self.curs.fetchone()
             self.conn.commit()
         return result

@@ -67,17 +67,23 @@ async def auth_exercise(message: types.Message):
 
     await AuthStates.exercise.set()
 
-
+exercise_dict = {
+    "run_100": "бег на 100 м",
+    "pull_up": "подтягивание на перекладине",
+    "marsh_for_5": "марш-бросок на 5 км"
+}
 async def auth_exercise_callback(callback_query: types.CallbackQuery, state: FSMContext):
-    exercise_dict = {
-        "run_100": "бег на 100 м",
-        "pull_up": "подтягивание на перекладине",
-        "marsh_for_5": "марш-бросок на 5 км"
-    }
-    exercise = exercise_dict[callback_query.data[9:]]
+    # exercise_dict = {
+    #     "run_100": "бег на 100 м",
+    #     "pull_up": "подтягивание на перекладине",
+    #     "marsh_for_5": "марш-бросок на 5 км"
+    # }
+    #exercise = exercise_dict[callback_query.data[9:]]
+    exercise = callback_query.data[9:]
+    exercise_d = exercise_dict[exercise]
     await state.update_data(exercise=exercise)
     await bot.answer_callback_query(callback_query.id)
-    await bot.send_message(callback_query.from_user.id, f"Введите результат выполения упражнения {exercise}")
+    await bot.send_message(callback_query.from_user.id, f"Введите результат выполения упражнения {exercise_d}")
     await AuthStates.exercise_result.set()
 
 
@@ -87,14 +93,22 @@ async def auth_exercise_result(message: types.Message, state: FSMContext):
     data = await state.get_data()
 #    sex = data['sex']
     exercise = data['exercise']
+    exercise_d = exercise_dict[exercise]
+    print(exercise)
 #    exercise_result = data['exercise_result']
     user_id = message.from_user.id
     db.add_exercise_exercise_result(exercise, exercise_result, user_id)
-    point = db.calc_result()[0]
+
+#    if exercise == "run_100":
+    point = db.calc_result(exercise)[0]
+
+
+
+
     print(point) # для отладки
     print(type(exercise_result)) # для отладки
     await message.answer(
-        f"Название упражнения: {exercise}\nРезультат выполнения упражнения: {exercise_result}\nКоличество баллов: {point}")
+        f"Название упражнения: {exercise_d}\nРезультат выполнения упражнения: {exercise_result}\nКоличество баллов: {point}")
     await state.finish()
     # await state.reset_state(with_data=True)
 
