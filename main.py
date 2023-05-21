@@ -88,7 +88,8 @@ async def auth_exercise_result(message: types.Message, state: FSMContext):
     sex = data['sex']
     exercise = data['exercise']
     exercise_result = data['exercise_result']
-
+    user_id = message.from_user.id
+    db.add_exercise_exercise_result(exercise, exercise_result, user_id)
     await message.answer(
         f"Ваш пол {sex}.\nНазвание упражнения: {exercise}\nРезультат выполнения упражнения: {exercise_result}")
     await state.finish()
