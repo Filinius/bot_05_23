@@ -97,6 +97,7 @@ async def auth_exercise_result(message: types.Message, state: FSMContext):
     print(exercise)
 #    exercise_result = data['exercise_result']
     user_id = message.from_user.id
+#    db.add_user(message.from_user.id, message.from_user.full_name)
     db.add_exercise_exercise_result(exercise, exercise_result, user_id)
 
 #    if exercise == "run_100":

@@ -55,5 +55,5 @@ INNER JOIN orders ON users.id = orders.user_id;
 таблице "orders". Если вы хотите, чтобы результаты были отфильтрованы по определенному условию, вы можете добавить 
 оператор WHERE:
 """
-# s = Database("new.db")
-# s.create_table_user()
+#s = Database("new.db")
+#s.create_table_user()
