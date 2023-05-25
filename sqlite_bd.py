@@ -37,7 +37,7 @@ class Database:
     def calc_result(self, exercise):
         with self.conn:
             self.curs.execute(
-                f"SELECT points FROM run_100 INNER JOIN users ON run_100.{exercise} <= users.exercise_result ORDER BY run_100.{exercise} DESC LIMIT 1"
+                f"SELECT points FROM run_100 INNER JOIN users ON run_100.{exercise} >= users.exercise_result ORDER BY run_100.{exercise} ASC LIMIT 1"
             )
             result = self.curs.fetchone()
             self.conn.commit()
