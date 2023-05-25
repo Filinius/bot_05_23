@@ -6,13 +6,12 @@ class Database:
         self.conn = sqlite3.connect(db_file)
         self.curs = self.conn.cursor()
 
-    # async def connect(self):
-    # self.conn = sqlite3.connect(self.db_file)
-
     async def create_table_user(self):
         self.curs.execute(
             'CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, user_id INTEGER, full_name TEXT, '
             'exercise TEXT, exercise_result TEXT)')
+        # self.curs.execute('''CREATE TABLE run_100
+        #              (points INTEGER, run_100 FLOAT, pull_up INTEGER, marsh_for_5 FLOAT)''')
         self.conn.commit()
 
     def add_id_user_full_name(self, user_id, full_name):
@@ -38,22 +37,11 @@ class Database:
     def calc_result(self, exercise):
         with self.conn:
             self.curs.execute(
-                "SELECT points FROM run_100 INNER JOIN users ON run_100.{} = users.exercise_result".format(exercise,))
+                f"SELECT points FROM run_100 INNER JOIN users ON run_100.{exercise} <= users.exercise_result ORDER BY run_100.{exercise} DESC LIMIT 1"
+            )
             result = self.curs.fetchone()
             self.conn.commit()
         return result
 
-    # def calc_result(self):
-    #     with self.conn:
-    #         self.curs.execute("SELECT points FROM run_100 INNER JOIN users ON run_100.exercise_result = users.exercise_result")
-    #         self.conn.commit()
-"""
-SELECT users.name, orders.order_date
-FROM users
-INNER JOIN orders ON users.id = orders.user_id;
-Этот запрос выберет имена пользователей и даты их заказов и свяжет их по полю "id" в таблице "users" и полю "user_id" в 
-таблице "orders". Если вы хотите, чтобы результаты были отфильтрованы по определенному условию, вы можете добавить 
-оператор WHERE:
-"""
 # s = Database("new.db")
 # s.create_table_user()
