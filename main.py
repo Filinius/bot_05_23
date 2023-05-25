@@ -13,7 +13,7 @@ db = Database('new.db')
 
 
 class AuthStates(StatesGroup):
-#    sex = State()
+
     exercise = State()
     exercise_result = State()
 
@@ -34,26 +34,6 @@ async def start_handler(message: types.Message):
                          f"выполнено упражнение.\nНажми /calc, чтобы начать.")
 
 
-# async def auth_sex(message: types.Message):
-#     buttons = [
-#         types.InlineKeyboardButton(text="Муж.", callback_data="sex_m"),
-#         types.InlineKeyboardButton(text="Жен.", callback_data="sex_w")
-#     ]
-#     keyboard = types.InlineKeyboardMarkup(row_width=1)
-#     keyboard.add(*buttons)
-#
-#     await message.answer(f"Выберите пол:", reply_markup=keyboard)
-#     await AuthStates.sex.set()
-
-
-#async def auth_sex_callback(callback_query: types.CallbackQuery, state: FSMContext):
-    # sex_dict = {
-    #     "m": "муж",
-    #     "w": "жен"
-    # }
-    # sex = sex_dict[callback_query.data[4:]]
-    # await state.update_data(sex=sex)
-    # await bot.answer_callback_query(callback_query.id)
 async def auth_exercise(message: types.Message):
     buttons = [
         types.InlineKeyboardButton(text="Бег на 100 м", callback_data="exercise_run_100"),
@@ -73,12 +53,7 @@ exercise_dict = {
     "marsh_for_5": "марш-бросок на 5 км"
 }
 async def auth_exercise_callback(callback_query: types.CallbackQuery, state: FSMContext):
-    # exercise_dict = {
-    #     "run_100": "бег на 100 м",
-    #     "pull_up": "подтягивание на перекладине",
-    #     "marsh_for_5": "марш-бросок на 5 км"
-    # }
-    #exercise = exercise_dict[callback_query.data[9:]]
+
     exercise = callback_query.data[9:]
     exercise_d = exercise_dict[exercise]
     await state.update_data(exercise=exercise)
@@ -95,20 +70,18 @@ async def auth_exercise_result(message: types.Message, state: FSMContext):
     exercise = data['exercise']
     exercise_d = exercise_dict[exercise]
     print(exercise)
-#    exercise_result = data['exercise_result']
+
     user_id = message.from_user.id
-#    db.add_user(message.from_user.id, message.from_user.full_name)
+
     db.add_exercise_exercise_result(exercise, exercise_result, user_id)
 
-#    if exercise == "run_100":
-#    exercise_result_p = "exercise_result_"+exercise
     print(exercise_result)
     point = db.calc_result(exercise)[0]
 
 
 
 
-#    print(point) # для отладки
+
     print(type(exercise_result)) # для отладки
     await message.answer(
         f"Название упражнения: {exercise_d}\nРезультат выполнения упражнения: {exercise_result}\nКоличество баллов: {point}")
