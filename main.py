@@ -27,8 +27,6 @@ async def on_startup(_):
 
 
 async def start_handler(message: types.Message):
-    # db.add_id_user_full_name(message.from_user.id, message.from_user.full_name)
-    #db.add_user(message.from_user.id, message.from_user.full_name)
     name = message.from_user.full_name
     await message.answer(f"Привет {name}! Я помогу тебе узнать на баллов "
                          f"выполнено упражнение.\nНажми /calc, чтобы начать.")
@@ -66,7 +64,6 @@ async def auth_exercise_result(message: types.Message, state: FSMContext):
     exercise_result = message.text.strip()
     await state.update_data(exercise_result=exercise_result)
     data = await state.get_data()
-#    sex = data['sex']
     exercise = data['exercise']
     exercise_d = exercise_dict[exercise]
     print(exercise)
@@ -92,8 +89,6 @@ async def auth_exercise_result(message: types.Message, state: FSMContext):
 def register_handlers(dp: Dispatcher):
     dp.register_message_handler(start_handler, commands="start")
     dp.register_message_handler(auth_exercise, commands="calc")
-#    dp.register_callback_query_handler(auth_sex_callback, lambda c: c.data and c.data.startswith('sex_'),
-#                                       state=AuthStates.sex)
     dp.register_callback_query_handler(auth_exercise_callback, lambda c: c.data and c.data.startswith('exercise_'),
                                        state=AuthStates.exercise)
     dp.register_message_handler(auth_exercise_result, state=AuthStates.exercise_result)
