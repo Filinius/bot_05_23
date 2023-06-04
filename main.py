@@ -11,6 +11,7 @@ bot = Bot(token=config.TOKEN)
 dp = Dispatcher(bot=bot, storage=MemoryStorage())
 
 
+
 class AuthStates(StatesGroup):
 
     exercise = State()
