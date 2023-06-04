@@ -71,7 +71,7 @@ async def auth_exercise_result(message: types.Message, state: FSMContext):
     exercise_d = exercise_dict[exercise]
     print(exercise)
 
-    user_id = message.from_user.id
+    #user_id = message.from_user.id
 
     #db.add_exercise_exercise_result(exercise, exercise_result, user_id)
 
@@ -84,7 +84,7 @@ async def auth_exercise_result(message: types.Message, state: FSMContext):
 
     print(type(exercise_result)) # для отладки
     await message.answer(
-        f"Название упражнения: {exercise_d}\nРезультат выполнения упражнения: {exercise_result}\nКоличество баллов: {point}")
+        f"Название упражнения: {exercise_d}\nРезультат выполнения упражнения: {exercise_result}\nКоличество баллов: ")
     await state.finish()
     # await state.reset_state(with_data=True)
 
