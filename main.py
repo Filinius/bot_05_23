@@ -4,12 +4,11 @@ from aiogram import Bot, Dispatcher, executor, types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import StatesGroup, State
 import config
-from sqlite_bd import Database
+from pandas_processing import *
 
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=config.TOKEN)
 dp = Dispatcher(bot=bot, storage=MemoryStorage())
-db = Database('new.db')
 
 
 class AuthStates(StatesGroup):
@@ -19,16 +18,17 @@ class AuthStates(StatesGroup):
 
 
 async def on_startup(_):
-    try:
-        await db.create_table_user()
-        logging.info("Подключение к БД выполнено успешно")
-    except Exception as e:
-        logging.exception(e)
+    pass
+    # try:
+    #     await db.create_table_user()
+    #     logging.info("Подключение к БД выполнено успешно")
+    # except Exception as e:
+    #     logging.exception(e)
 
 
 async def start_handler(message: types.Message):
     # db.add_id_user_full_name(message.from_user.id, message.from_user.full_name)
-    db.add_user(message.from_user.id, message.from_user.full_name)
+    #db.add_user(message.from_user.id, message.from_user.full_name)
     name = message.from_user.full_name
     await message.answer(f"Привет {name}! Я помогу тебе узнать на баллов "
                          f"выполнено упражнение.\nНажми /calc, чтобы начать.")
@@ -73,10 +73,10 @@ async def auth_exercise_result(message: types.Message, state: FSMContext):
 
     user_id = message.from_user.id
 
-    db.add_exercise_exercise_result(exercise, exercise_result, user_id)
+    #db.add_exercise_exercise_result(exercise, exercise_result, user_id)
 
     print(exercise_result)
-    point = db.calc_result(exercise)[0]
+    #point = db.calc_result(exercise)[0]
 
 
 
