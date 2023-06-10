@@ -85,11 +85,11 @@ async def auth_exercise_result(message: types.Message, state: FSMContext):
 
     elif exercise in timess:
         try:
-            exercise_result = float(exercise_result.strip())
+            exercise_result = float(exercise_result.strip().replace(",", "."))
             exercise_points = df.calc_result_time(exercise, exercise_result)
         except ValueError:
             await message.answer(f"Введено некорректное значение!\n"
-                                 f"Введите результат выполнения упражнения {exercise_d} в формате мин.сек"
+                                 f"Введите результат выполнения упражнения {exercise_d} в виде числа"
                                  f"\nНапример: 12.25")
             return
 
