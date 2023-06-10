@@ -28,7 +28,7 @@ async def on_startup(_):
 
 async def start_handler(message: types.Message):
     name = message.from_user.full_name
-    await message.answer(f"Привет {name}! Я помогу тебе узнать на баллов "
+    await message.answer(f"Привет {name}! Я помогу тебе узнать на сколько баллов "
                          f"выполнено упражнение.\nНажми /calc, чтобы начать.")
 
 
@@ -74,16 +74,24 @@ async def auth_exercise_result(message: types.Message, state: FSMContext):
     timess = ['run_100', 'marsh_for_5']
 
     if exercise == 'pull_up':
-        exercise_result = int(message.text.strip())
-        exercise_points = df.calc_result_reps(exercise, exercise_result)
+        try:
+            exercise_result = int(message.text.strip())
+            exercise_points = df.calc_result_reps(exercise, exercise_result)
+        except ValueError:
+            await message.answer(f"Введено некорректное значение!\n"
+                                 f"Введите количество повторений упражнения {exercise_d}."
+                                 f"\nНапример: 15")
+            return
+
     elif exercise in timess:
-        exercise_result = float(message.text.strip())
-        exercise_points = df.calc_result_time(exercise, exercise_result)
-
-
-    # user_id = message.from_user.id
-
-    # db.add_exercise_exercise_result(exercise, exercise_result, user_id)
+        try:
+            exercise_result = float(exercise_result.strip())
+            exercise_points = df.calc_result_time(exercise, exercise_result)
+        except ValueError:
+            await message.answer(f"Введено некорректное значение!\n"
+                                 f"Введите результат выполнения упражнения {exercise_d} в формате мин.сек"
+                                 f"\nНапример: 12.25")
+            return
 
     print(exercise_result)
     # point = db.calc_result(exercise)[0]
