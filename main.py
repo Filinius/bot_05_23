@@ -4,15 +4,15 @@ from aiogram import Bot, Dispatcher, executor, types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import StatesGroup, State
 import config
-from pandas_processing import *
+from pandas_processing import PandasCalc
 
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=config.TOKEN)
 dp = Dispatcher(bot=bot, storage=MemoryStorage())
+df = PandasCalc('Data/102.xlsx')
 
 
 class AuthStates(StatesGroup):
-
     exercise = State()
     exercise_result = State()
 
@@ -45,13 +45,15 @@ async def auth_exercise(message: types.Message):
 
     await AuthStates.exercise.set()
 
+
 exercise_dict = {
     "run_100": "бег на 100 м",
     "pull_up": "подтягивание на перекладине",
     "marsh_for_5": "марш-бросок на 5 км"
 }
-async def auth_exercise_callback(callback_query: types.CallbackQuery, state: FSMContext):
 
+
+async def auth_exercise_callback(callback_query: types.CallbackQuery, state: FSMContext):
     exercise = callback_query.data[9:]
     exercise_d = exercise_dict[exercise]
     await state.update_data(exercise=exercise)
@@ -61,27 +63,25 @@ async def auth_exercise_callback(callback_query: types.CallbackQuery, state: FSM
 
 
 async def auth_exercise_result(message: types.Message, state: FSMContext):
-    exercise_result = message.text.strip()
+    exercise_result = float(message.text.strip())
     await state.update_data(exercise_result=exercise_result)
     data = await state.get_data()
     exercise = data['exercise']
     exercise_d = exercise_dict[exercise]
     print(exercise)
 
-    #user_id = message.from_user.id
+    exercise_points = df.calc_result_reps(exercise, exercise_result)
 
-    #db.add_exercise_exercise_result(exercise, exercise_result, user_id)
+    # user_id = message.from_user.id
+
+    # db.add_exercise_exercise_result(exercise, exercise_result, user_id)
 
     print(exercise_result)
-    #point = db.calc_result(exercise)[0]
+    # point = db.calc_result(exercise)[0]
 
-
-
-
-
-    print(type(exercise_result)) # для отладки
+    print(type(exercise_result))  # для отладки
     await message.answer(
-        f"Название упражнения: {exercise_d}\nРезультат выполнения упражнения: {exercise_result}\nКоличество баллов: ")
+        f"Название упражнения: {exercise_d}\nРезультат выполнения упражнения: {exercise_result}\nКоличество баллов: {exercise_points}")
     await state.finish()
     # await state.reset_state(with_data=True)
 
@@ -97,4 +97,3 @@ def register_handlers(dp: Dispatcher):
 if __name__ == '__main__':
     register_handlers(dp=dp)
     executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
-
