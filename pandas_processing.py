@@ -26,5 +26,5 @@ class PandasCalc:
 
         else:
             exercise_points = self.df.loc[self.df[exercise] == exercise_result, 'points'].iloc[0]
-            # Если есть значение полученного результата, то находим количество баллов.
+            # Если есть значение полученного результата "exercise_result", то находим количество баллов.
             return exercise_points
