@@ -28,8 +28,10 @@ async def on_startup(_):
 
 async def start_handler(message: types.Message):
     name = message.from_user.full_name
-    await message.answer(f"Привет {name}! Я помогу тебе узнать на сколько баллов "
-                         f"выполнено упражнение.\nНажми /calc, чтобы начать.")
+    await message.answer(f"Привет {name}!\nОнлайн калькулятор\n "
+                         f"По физической подготовке\n"
+                         f"НФП-2013\n"
+                         f"Нажми /calc, чтобы начать.")
 
 
 async def auth_exercise(message: types.Message):
@@ -98,11 +100,18 @@ async def auth_exercise_result(message: types.Message, state: FSMContext):
 
     print(type(exercise_result))  # для отладки
     await message.answer(
-        f"Название упражнения: {exercise_d}\n"
-        f"Результат выполнения упражнения: {exercise_result}\n"
+        f"Упражнение:\n{exercise_d.upper()}\n"
+        f"Результат: {exercise_result}\n"
         f"Количество баллов: {exercise_points}")
     await state.finish()
     # await state.reset_state(with_data=True)
+
+async def random_text(message:types.Message):
+    name = message.from_user.full_name
+    await message.answer(f"👋Привет {name}!\nОнлайн калькулятор\n"
+                         f"По физической подготовке\n"
+                         f"НФП-2013\n"
+                         f"Нажми /calc, чтобы начать.")
 
 
 def register_handlers(dp: Dispatcher):
@@ -111,6 +120,7 @@ def register_handlers(dp: Dispatcher):
     dp.register_callback_query_handler(auth_exercise_callback, lambda c: c.data and c.data.startswith('exercise_'),
                                        state=AuthStates.exercise)
     dp.register_message_handler(auth_exercise_result, state=AuthStates.exercise_result)
+    dp.register_message_handler(random_text)
 
 
 if __name__ == '__main__':
