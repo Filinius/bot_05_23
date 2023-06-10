@@ -11,7 +11,7 @@ class PandasCalc:
     def calc_result_time(self):
         pass
 
-    def calc_result_reps(self, exercise, exercise_result):
+    def calc_result_reps(self, exercise: str, exercise_result: int):
         # Проверяем, больше ли значение переменной "exercise_result" минимального значения в столбце "exercise" в df
         if exercise_result < self.df[exercise].min():
             return f"Результа меньше минимально допустимого. Упражнение не выполнено."
