@@ -79,18 +79,18 @@ async def auth_exercise_result(message: types.Message, state: FSMContext):
             exercise_points = df.calc_result_reps(exercise, exercise_result)
         except ValueError:
             await message.answer(f"Введено некорректное значение!\n"
-                                 f"Введите количество повторений упражнения {exercise_d}."
-                                 f"\nНапример: 15")
+                                 f"Введите количество повторений упражнения {exercise_d.upper()}."
+                                 f"\n<u>Например: 15</u>", parse_mode=types.ParseMode.HTML)
             return
 
     elif exercise in timess:
         try:
-            exercise_result = float(exercise_result.strip().replace(",", "."))
+            exercise_result = float(exercise_result.strip().replace(",", ".").replace(":", "."))
             exercise_points = df.calc_result_time(exercise, exercise_result)
         except ValueError:
             await message.answer(f"Введено некорректное значение!\n"
-                                 f"Введите результат выполнения упражнения {exercise_d} в виде числа"
-                                 f"\nНапример: 12.25")
+                                 f"Введите результат выполнения упражнения {exercise_d.upper()} в виде числа."
+                                 f"\n<u>Например: 12.25</u>", parse_mode=types.ParseMode.HTML)
             return
 
     print(exercise_result)
