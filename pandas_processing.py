@@ -1,5 +1,5 @@
 import pandas as pd
-import openpyxl
+#import openpyxl
 
 df = pd.read_excel('Data/102.xlsx')
 
