@@ -108,10 +108,10 @@ async def auth_exercise_result(message: types.Message, state: FSMContext):
 
 async def random_text(message:types.Message):
     name = message.from_user.full_name
-    await message.answer(f"👋Привет {name}!\nОнлайн калькулятор\n"
+    await message.answer(f"👋Привет {name}!\n\n     <b>Онлайн калькулятор</b>\n"
                          f"По физической подготовке\n"
-                         f"НФП-2013\n"
-                         f"Нажми /calc, чтобы начать.")
+                         f"               НФП-2013\n\n"
+                         f"Нажми /calc, чтобы начать.", parse_mode=types.ParseMode.HTML)
 
 
 def register_handlers(dp: Dispatcher):
