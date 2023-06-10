@@ -63,14 +63,23 @@ async def auth_exercise_callback(callback_query: types.CallbackQuery, state: FSM
 
 
 async def auth_exercise_result(message: types.Message, state: FSMContext):
-    exercise_result = float(message.text.strip())
+    exercise_result = message.text.strip()
     await state.update_data(exercise_result=exercise_result)
     data = await state.get_data()
     exercise = data['exercise']
     exercise_d = exercise_dict[exercise]
     print(exercise)
 
-    exercise_points = df.calc_result_reps(exercise, exercise_result)
+
+    timess = ['run_100', 'marsh_for_5']
+
+    if exercise == 'pull_up':
+        exercise_result = int(message.text.strip())
+        exercise_points = df.calc_result_reps(exercise, exercise_result)
+    elif exercise in timess:
+        exercise_result = float(message.text.strip())
+        exercise_points = df.calc_result_time(exercise, exercise_result)
+
 
     # user_id = message.from_user.id
 
@@ -81,7 +90,9 @@ async def auth_exercise_result(message: types.Message, state: FSMContext):
 
     print(type(exercise_result))  # для отладки
     await message.answer(
-        f"Название упражнения: {exercise_d}\nРезультат выполнения упражнения: {exercise_result}\nКоличество баллов: {exercise_points}")
+        f"Название упражнения: {exercise_d}\n"
+        f"Результат выполнения упражнения: {exercise_result}\n"
+        f"Количество баллов: {exercise_points}")
     await state.finish()
     # await state.reset_state(with_data=True)
 
