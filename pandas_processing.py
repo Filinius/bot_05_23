@@ -19,6 +19,11 @@ class PandasCalc:
             exercise_points = self.df.loc[self.df[exercise] == next_exercise_result, 'points'].iloc[0]
             # Получаем количество баллов.
             return exercise_points
+        else:
+            exercise_points = self.df.loc[self.df[exercise] == exercise_result, 'points'].iloc[0]
+            # Если есть значение полученного результата "exercise_result", то находим количество баллов.
+            return exercise_points
+
 
 
     def calc_result_reps(self, exercise, exercise_result):
@@ -33,7 +38,6 @@ class PandasCalc:
             exercise_points = self.df.loc[self.df[exercise] == next_exercise_result, 'points'].iloc[0]
             # Получаем количество баллов.
             return exercise_points
-
         else:
             exercise_points = self.df.loc[self.df[exercise] == exercise_result, 'points'].iloc[0]
             # Если есть значение полученного результата "exercise_result", то находим количество баллов.
