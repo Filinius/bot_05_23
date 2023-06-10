@@ -1,13 +1,17 @@
+from dotenv import load_dotenv
+import os
 import logging
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import StatesGroup, State
-import config
+#import config
 from pandas_processing import PandasCalc
 
+
+load_dotenv('.env')
 logging.basicConfig(level=logging.INFO)
-bot = Bot(token=config.TOKEN)
+bot = Bot(token=os.getenv('TOKEN'))
 dp = Dispatcher(bot=bot, storage=MemoryStorage())
 df = PandasCalc('Data/102.xlsx')
 
