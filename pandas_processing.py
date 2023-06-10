@@ -10,7 +10,7 @@ class PandasCalc:
 
     def calc_result_time(self, exercise, exercise_result):
         if exercise_result > self.df[exercise].max():
-            return f"Результа больше максимально допустимого. Упражнение не выполнено."
+            return f"0\nРезульта больше максимально допустимого.\nВы не уложились.\nУпражнение не выполнено."
 
         # Проверяем есть ли в столбце "exercise" какое-либо значение, равное переменной "exercise_result".
         if not any(self.df[exercise].eq(exercise_result)):
@@ -29,7 +29,7 @@ class PandasCalc:
     def calc_result_reps(self, exercise, exercise_result):
         # Проверяем, больше ли значение переменной "exercise_result" минимального значения в столбце "exercise" в df.
         if exercise_result < self.df[exercise].min():
-            return f"Результа меньше минимально допустимого. Упражнение не выполнено."
+            return f"0\nРезульта меньше минимально допустимого.\nВы не уложились.\nУпражнение не выполнено."
 
         # Проверяем есть ли в столбце "exercise" какое-либо значение, равное переменной "exercise_result".
         if not any(self.df[exercise].eq(exercise_result)):
